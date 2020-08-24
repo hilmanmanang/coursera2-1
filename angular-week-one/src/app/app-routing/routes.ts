@@ -15,6 +15,10 @@ export const routes: Routes = [
         component: MenuComponent
     },
     {
+        path: 'contactus',
+        component: ContactComponent
+    },
+    {
         path: '',
         redirectTo: '/home',
         pathMatch: 'full'
