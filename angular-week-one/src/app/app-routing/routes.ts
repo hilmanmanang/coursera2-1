@@ -15,8 +15,16 @@ export const routes: Routes = [
         component: MenuComponent
     },
     {
+        path: 'dishdetail/:id',
+        component: DishdetailComponent
+    },
+    {
         path: 'contactus',
         component: ContactComponent
+    },
+    {
+        path: 'aboutus',
+        component: AboutComponent
     },
     {
         path: '',
