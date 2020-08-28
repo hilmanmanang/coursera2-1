@@ -56,16 +56,20 @@
 
   <div>
     <h2>Corporate Leadership</h2>
-    <div fxLayout="row" *ngFor="let leader of leaders">
-        <mat-list fxflex="50">
-            <img height="80px" style="border-radius: 50%; margin-right: 20px;" src={{leader.image}} alt={{leader.name}}>
-        </mat-list>
-        <mat-list fxflex="100">
-            <div>{{leader.name}}</div>
-            <div>{{leader.designation}}</div>
-            <div>{{leader.description}}</div>
-        </mat-list>
+    <mat-list *ngIf="leaders">
+      <mat-list-item *ngFor="let leader of leaders">
+        <img mat-list-avatar src={{leader.image}} alt={{leader.name}}>
+        <h4 matLine>
+          {{leader.name}}
+          {{leader.abbr}}
+        </h4>
+        <p matLine>{{leader.designation}}</p>
+        <p matLine>{{leader.description}}</p>
+      </mat-list-item>
+    </mat-list>
+    <div [hidden]="leaders">
+      <mat-spinner></mat-spinner>
+      <h4>Loading... Please Wait!</h4>
     </div>
-
   </div>
 </div>
