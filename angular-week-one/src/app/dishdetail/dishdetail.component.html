@@ -47,8 +47,31 @@
       </mat-grid-list>
     </mat-list> 
   </div>
-  <div fxFlex [hidden]="dish">
-    <mat-spinner></mat-spinner>
-    <h4>Loading... Please Wait!</h4>
-  </div> 
+</div>
+<div>
+  <form novalidate [formGroup]="commentForm" #cform="ngForm">
+    <div>
+      <mat-form-field class="full-width">
+        <input matInput formControlName="author" placeholder="Name" type="text" required>
+        <!-- <mat-error *ngIf="formErrors.firstname">{{formErrors.firstname}}</mat-error> -->
+      </mat-form-field>
+    </div>
+    <div>
+    <mat-form-field class="full-width">
+      <mat-slider formControlName="rating" tickInterval="3"></mat-slider>
+      <!-- <mat-error *ngIf="formErrors.lastname">{{formErrors.lastname}}</mat-error> -->
+    </mat-form-field>
+    </div>
+    <div>
+    <mat-form-field class="full-width">
+      <textarea matInput formControlName="message" placeholder="Your Comment" rows=12></textarea>
+    </mat-form-field>
+    </div>
+    <div>
+<!-- start -->
+      <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
+<!-- end -->
+      <!-- <button type="submit" mat-button class="background-primary text-floral-white" [disable]="feedbackForm.invalid">Submit</button> -->
+    </div>
+  </form>
 </div>
