@@ -5,6 +5,7 @@ import { Location } from '@angular/common';
 import { DishService } from '../services/dish.service';
 import { switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DishDetailComments, RatingType } from '../shared/dishdetailcomments';
 
 @Component({
   selector: 'app-dishdetail',
@@ -15,11 +16,29 @@ export class DishdetailComponent implements OnInit {
 
   @ViewChild('cform') commentFormDirective;
 
+  formErrors = {
+    'author': '',
+    'comment': ''
+  };
+
+  validationMessages = {
+    'author': {
+      'required': 'Author is required.',
+      'minlength': 'First name must be at least 2 characters long.',
+    },
+    'comment': {
+      'required': 'Comments is required.',
+      'minlength': 'Last name must be at least 2 characters long.',
+    }
+  };
+
   dish: Dish;
   dishIds: string[];
   prev: string;
   next: string;
-  commentForm: FormGroup;
+  dishdetailcommentsForm: FormGroup;
+  dishdetailcomments: DishDetailComments;
+  rating = RatingType;
 
   constructor(
     private dishService: DishService,
@@ -49,11 +68,45 @@ export class DishdetailComponent implements OnInit {
   }
 
   createForm() {
-    this.commentForm = this.fb.group({
+    this.dishdetailcommentsForm = this.fb.group({
       author: ['', [Validators.required, Validators.minLength(2)]],
-      rating: ['', [Validators.required, Validators.minLength(2)]],
-      comment: ['', Validators.required ],
+      rating: '5',
+      comment: ['', [Validators.required, Validators.minLength(2)] ],
     });
+
+    this.dishdetailcommentsForm.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.onValueChanged();
   }
-  
+
+  onValueChanged(data?: any) {
+    if (!this.dishdetailcommentsForm) {
+      return;
+    }
+    const form = this.dishdetailcommentsForm;
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
+        this.formErrors[field] = '';
+        const control = form.get(field);
+        if (control && control.dirty && !control.valid) {
+          const messages = this.validationMessages[field];
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key)) {
+              this.formErrors[field] += messages[key] + ' ';
+            }
+          }
+        }
+      }
+    }
+  }
+
+  onSubmit() {
+    this.dishdetailcomments = this.dishdetailcommentsForm.value;
+    console.log(this.dishdetailcomments);
+    this.dishdetailcommentsForm.reset({
+      author: '',
+      rating: '5',
+      comment: ''
+    });
+    this.commentFormDirective.resetForm();
+  }
 }

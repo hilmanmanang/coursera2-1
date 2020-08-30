@@ -48,30 +48,28 @@
     </mat-list> 
   </div>
 </div>
-<div>
-  <form novalidate [formGroup]="commentForm" #cform="ngForm">
+
+<div class="container" *ngIf="dish">
+  <form novalidate [formGroup]="dishdetailcommentsForm" #cform="ngForm" (ngSubmit)="onSubmit()">
     <div>
       <mat-form-field class="full-width">
         <input matInput formControlName="author" placeholder="Name" type="text" required>
-        <!-- <mat-error *ngIf="formErrors.firstname">{{formErrors.firstname}}</mat-error> -->
+        <mat-error *ngIf="formErrors.author">{{formErrors.author}}</mat-error>
       </mat-form-field>
     </div>
     <div>
     <mat-form-field class="full-width">
-      <mat-slider formControlName="rating" tickInterval="3"></mat-slider>
-      <!-- <mat-error *ngIf="formErrors.lastname">{{formErrors.lastname}}</mat-error> -->
+      <mat-slider thumbLabel="true" showTicks="true" min="1" max="5" step="1" formControlName="rating" value="5"></mat-slider>
     </mat-form-field>
     </div>
     <div>
-    <mat-form-field class="full-width">
-      <textarea matInput formControlName="message" placeholder="Your Comment" rows=12></textarea>
-    </mat-form-field>
+      <mat-form-field class="full-width">
+        <textarea matInput formControlName="comment" placeholder="Your Comment" rows=12 required></textarea>
+        <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
+      </mat-form-field>
     </div>
     <div>
-<!-- start -->
-      <button type="submit" mat-button class="background-primary text-floral-white">Submit</button>
-<!-- end -->
-      <!-- <button type="submit" mat-button class="background-primary text-floral-white" [disable]="feedbackForm.invalid">Submit</button> -->
+      <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="dishdetailcommentsForm.invalid">Submit</button>
     </div>
   </form>
 </div>
