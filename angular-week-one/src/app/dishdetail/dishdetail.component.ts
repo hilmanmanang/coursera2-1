@@ -6,7 +6,7 @@ import { DishService } from '../services/dish.service';
 import { Comment } from '../shared/comment';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { visibility, flyInOut } from '../animations/app.animation';
+import { visibility, flyInOut, expand } from '../animations/app.animation';
 
 @Component({
     selector: 'app-dishdetail',
@@ -16,10 +16,7 @@ import { visibility, flyInOut } from '../animations/app.animation';
       '[@flyInOut]': 'true',
       'style': 'display: block;'
     },
-    animations: [
-      flyInOut(), 
-      visibility()
-    ]
+    animations: [ flyInOut(), visibility(), expand() ]
 })
 export class DishdetailComponent implements OnInit {
 
