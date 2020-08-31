@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
 import { flyInOut } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';  
 
 @Component({
   selector: 'app-contact',
@@ -11,13 +12,16 @@ import { flyInOut } from '../animations/app.animation';
     '[@flyInOut]': 'true',
     'style': 'display: block;'
   },
-  animations: [
-    flyInOut()
-  ]
+  animations: [ flyInOut() ]
 })
 export class ContactComponent implements OnInit {
 
   @ViewChild('fform') feedbackFormDirective;
+  feedbackForm: FormGroup;
+  feedback: Feedback;
+  errMess: string;
+  feedbackData;
+  contactType = ContactType;
 
   formErrors = {
     'firstname': '',
@@ -47,15 +51,19 @@ export class ContactComponent implements OnInit {
     }
   };
 
-  feedbackForm: FormGroup;
-  feedback: Feedback;
-  contactType = ContactType;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private feedbackService: FeedbackService
+    ) {
     this.createForm();
   }
 
   ngOnInit() {
+    this.feedbackService.getFeedbacks().subscribe( respond => {
+      this.feedbackData = respond;
+      console.log(this.feedbackData);
+    })
   }
 
   createForm() {
@@ -68,7 +76,6 @@ export class ContactComponent implements OnInit {
       contacttype: 'None',
       message: ''
     });
-
     this.feedbackForm.valueChanges.subscribe(data => this.onValueChanged(data));
     this.onValueChanged();
   }
@@ -96,7 +103,14 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
+    console.log('The feedback : ', this.feedback);
+    this.feedbackService.pushFeedback(this.feedback).subscribe( res => {
+      this.feedback = res;
+    },
+    errmess => {
+      this.feedback = null;
+      this.errMess = <any>errmess;
+    })
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
